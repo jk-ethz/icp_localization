@@ -114,6 +114,10 @@ void RangeDataAccumulatorRos::cloudCallback(const sensor_msgs::PointCloud2 &msg)
 {
 //  DP cloud = pointmatcher_ros::rosMsgToPointMatcherCloud<float>(msg);
   DP cloud = pointmatcher_ros::RosPointCloud2Deserializer<float>::deserialize(msg);
+  if (cloud.features.cols() != cloud.descriptors.cols()) {
+    ROS_WARN("Found message with non-matching feature and descriptor sizes (features = %li, descriptors = %li), discarding it", cloud.features.cols(), cloud.descriptors.cols());
+    return;
+  }
 
   Time timestamp;
   timestamp = fromRos(msg.header.stamp);
