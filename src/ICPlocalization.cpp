@@ -36,10 +36,7 @@ const double kRadToDeg = 180.0 / M_PI;
 ICPlocalization::ICPlocalization(const ros::NodeHandle &nh) :
 		nh_(nh), rangeDataAccumulator_(nh) {
 	initializeInternal();
-	auto callable = [this]() {
-		icpWorker();
-	};
-	icpWorker_ = std::thread(callable);
+	icpWorker_ = std::thread{&ICPlocalization::icpWorker, this};
 }
 
 ICPlocalization::~ICPlocalization() {
